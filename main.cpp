@@ -20,7 +20,7 @@
 #include <limits>
 
 std::mutex output_mutex;
-unsigned long long NUM_ITER = 1000000000ULL;
+unsigned long long NUM_ITER = 100000000ULL;
 
 // #define USE_INT64
 // #define USE_FLOAT
