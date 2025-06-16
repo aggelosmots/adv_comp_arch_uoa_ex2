@@ -163,7 +163,7 @@ int main(int argc, char* argv[]) {
     std::mt19937_64 gen(static_cast<num_t>(seed));
 
     #ifdef USE_INT64
-    constexpr int64_t max_val = std::numeric_limits<int64_t>::max() / 10000000000.0;
+    constexpr int64_t max_val = std::numeric_limits<int64_t>::max() / 100000000000.0;
     constexpr int64_t min_val = -max_val;
     std::uniform_int_distribution<int64_t> dist(min_val, max_val);
     std::vector<int64_t> numbers(N);
