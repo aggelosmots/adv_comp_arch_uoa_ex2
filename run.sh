@@ -21,7 +21,8 @@ fi
 # tests=("USE_FLOAT")
 # tests=("USE_DOUBLE")
 # tests=("USE_MATMUL")
-tests=("USE_INT64" "USE_FLOAT" "USE_DOUBLE" "USE_MATMUL")
+# tests=("USE_ROOT")
+tests=("USE_INT64" "USE_FLOAT" "USE_DOUBLE" "USE_MATMUL" "USE_ROOT")
 
 # Compile and run for each test
 for test in "${tests[@]}"; do

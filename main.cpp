@@ -1,3 +1,10 @@
+/**
+ * autor: Angelos Motsios
+ * Semester: 2nd Semester 2024-2025
+ * Master of Computer, Network and Telecommunication Engineering
+ * Department of Informatics, University of Athens
+ */
+
 #include <iostream>
 #include <vector>
 #include <thread>
@@ -13,7 +20,7 @@
 #include <limits>
 
 std::mutex output_mutex;
-constexpr unsigned long long NUM_ITER = 1000000000ULL;
+unsigned long long NUM_ITER = 1000000000ULL;
 
 // #define USE_INT64
 // #define USE_FLOAT
@@ -32,6 +39,9 @@ using num_t = double;
 #elif defined(USE_MATMUL)
 using num_t = double;
 #define TEST_NAME "mat_mul"
+#elif defined(USE_ROOT)
+using num_t = double;
+#define TEST_NAME "root_calc"
 #else
 using num_t = float;
 #define TEST_NAME "error"
@@ -104,6 +114,21 @@ void mat_mul(double* result,
     }
     *result = sum;
 }
+#elif defined(USE_ROOT)
+void calc(const std::vector<num_t>& numbers, num_t* result) {
+    num_t acc = 0.0;
+    size_t N = numbers.size();
+    for (size_t i = 0; i < NUM_ITER; ++i) {
+        num_t val = numbers[i % N];
+        if (i % 2 == 0)
+            acc += std::sqrt(std::abs(val)) + std::cbrt(std::abs(val + 1.0));
+        else
+            acc -= std::sqrt(std::abs(val)) + std::cbrt(std::abs(val + 1.0));
+        acc += std::sqrt(std::abs(acc + 2.0));
+        acc -= std::cbrt(std::abs(acc + 3.0));
+    }
+    *result = std::sqrt(std::abs(acc));
+}
 #endif
 
 int main(int argc, char* argv[]) {
@@ -133,12 +158,12 @@ int main(int argc, char* argv[]) {
     unsigned int seed = rd();
 
     auto exec_start = std::chrono::steady_clock::now();
-    unsigned int N = 1000000000;
+    unsigned int N = 10000000;
 
     std::mt19937_64 gen(static_cast<num_t>(seed));
 
     #ifdef USE_INT64
-    constexpr int64_t max_val = std::numeric_limits<int64_t>::max() / 100000000.0;
+    constexpr int64_t max_val = std::numeric_limits<int64_t>::max() / 10000000000.0;
     constexpr int64_t min_val = -max_val;
     std::uniform_int_distribution<int64_t> dist(min_val, max_val);
     std::vector<int64_t> numbers(N);
@@ -156,7 +181,7 @@ int main(int argc, char* argv[]) {
     num_t divisor = dist(gen);
     if (divisor == 0.0) divisor = 1.0;
 #elif defined(USE_MATMUL)
-    N = 23000;
+    N = 1000;
     std::vector<std::vector<num_t>> A(N, std::vector<num_t>(N));
     std::vector<std::vector<num_t>> B(N, std::vector<num_t>(N));
     std::uniform_real_distribution<num_t> dist(-10000.0, 10000.0);
@@ -167,6 +192,17 @@ int main(int argc, char* argv[]) {
             B[i][j] = dist(gen);
         }
     }
+#elif defined(USE_ROOT)
+    NUM_ITER = 100000000;
+    constexpr num_t max_val = std::numeric_limits<num_t>::max() / 100000000.0;
+    constexpr num_t min_val = -max_val;
+    std::uniform_real_distribution<num_t> dist(min_val, max_val);
+    std::vector<num_t> numbers(N);
+    for (size_t i = 0; i < N; ++i) {
+        numbers[i] = dist(gen);
+    }
+    num_t divisor = dist(gen);
+    if (divisor == 0.0) divisor = 1.0;
 #endif
 
 for (long i = 0; i < num_cores; ++i) {
@@ -177,6 +213,8 @@ for (long i = 0; i < num_cores; ++i) {
         threads.emplace_back(calc, std::cref(numbers), divisor, results[i].get());
 #elif defined(USE_MATMUL)
         threads.emplace_back(mat_mul, results[i].get(), std::cref(A), std::cref(B));
+#elif defined(USE_ROOT)
+        threads.emplace_back(calc, std::cref(numbers), results[i].get());
 #endif
     }
 
