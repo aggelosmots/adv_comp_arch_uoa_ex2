@@ -1,4 +1,4 @@
 acas*
-result*
+*.csv
 .vscode
 main_*

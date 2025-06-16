@@ -151,11 +151,16 @@ int main(int argc, char* argv[]) {
         return EXIT_FAILURE;
     }
 
+    unsigned int seed;
+    if (argc > 3) {
+        seed = static_cast<unsigned int>(std::stoul(argv[3]));
+    } else {
+        std::random_device rd;
+        seed = rd();
+    }
+
     std::vector<std::thread> threads;
     std::vector<std::unique_ptr<num_t>> results(num_cores);
-
-    std::random_device rd;
-    unsigned int seed = rd();
 
     auto exec_start = std::chrono::steady_clock::now();
     unsigned int N = 1000000;
