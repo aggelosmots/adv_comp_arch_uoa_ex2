@@ -158,7 +158,7 @@ int main(int argc, char* argv[]) {
     unsigned int seed = rd();
 
     auto exec_start = std::chrono::steady_clock::now();
-    unsigned int N = 10000000;
+    unsigned int N = 1000000;
 
     std::mt19937_64 gen(static_cast<num_t>(seed));
 
