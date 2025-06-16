@@ -41,7 +41,6 @@ for test in "${tests[@]}"; do
         status=$?
         if [ $status -ne 0 ]; then
             echo "$exe exited with failure (exit code $status)."
-            break
         fi
     done
 done
