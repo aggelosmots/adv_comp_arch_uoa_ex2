@@ -171,7 +171,7 @@ int main(int argc, char* argv[]) {
         numbers[i] = dist(gen);
     }
 #elif defined(USE_FLOAT) || defined(USE_DOUBLE)
-    constexpr num_t max_val = std::numeric_limits<num_t>::max() / 100000000.0;
+    constexpr num_t max_val = std::numeric_limits<num_t>::max() / 1000000000.0;
     constexpr num_t min_val = -max_val;
     std::uniform_real_distribution<num_t> dist(min_val, max_val);
     std::vector<num_t> numbers(N);
