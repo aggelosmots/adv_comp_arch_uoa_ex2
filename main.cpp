@@ -147,7 +147,7 @@ int main(int argc, char* argv[]) {
     }
 
     if (argc < 3) {
-        std::cerr << "Usage: " << argv[0] << " <num_cores> <output_file>\n";
+        std::cerr << "Usage: " << argv[0] << " <num_cores> <output_file> [seed]\n";
         return EXIT_FAILURE;
     }
 
