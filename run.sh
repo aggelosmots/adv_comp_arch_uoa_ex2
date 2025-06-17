@@ -1,7 +1,7 @@
 # Get number of logical cores
 num_cores=$(nproc)
 echo "Logical cores: $num_cores"
-iter=500
+iter=250
 
 # Get processor name (remove spaces and slashes for filename safety)
 cpu_name=$(grep -m1 'model name' /proc/cpuinfo | cut -d: -f2 | sed 's/^[ \t]*//' | tr ' /' '__')
